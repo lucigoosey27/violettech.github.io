@@ -9,6 +9,7 @@
             --fg: #0f172a;   /* dark text for readability */
             --muted: #475569;
             --accent: #a78bfa;
+            --bg: #f3f5f9;   /* NEW: light gray background */
         }
 
         * { box-sizing: border-box }
@@ -19,13 +20,13 @@
             color: var(--fg);
             font: 16px/1.6 system-ui, -apple-system, Segoe UI, Roboto, Inter, sans-serif;
             overflow-x: hidden;
-            background: #ffffff; /* fallback while canvas starts */
+            background: var(--bg); /* fallback while canvas starts */
         }
 
         /* LetterGlitch background container */
         #letterglitch-container {
             position: fixed; inset: 0;
-            background: #ffffff; /* white backdrop for pastel pop */
+            background: var(--bg); /* NEW: use the light gray */
             overflow: hidden;
             z-index: 0;
         }
@@ -44,12 +45,12 @@
         .wrap { flex: 1 0 auto; position: relative; z-index: 2; display: grid; place-items: center; padding: 2rem; }
         .card {
             width: min(920px, 92vw);
-            background: rgba(255,255,255,0.7);
+            background: rgba(255,255,255,0.75);
             border: 1px solid rgba(167,139,250,.35);
             border-radius: 16px;
             backdrop-filter: blur(12px) saturate(160%);
             padding: 1.25rem 1.25rem 1.5rem;
-            box-shadow: 0 10px 30px rgba(0,0,0,.15);
+            box-shadow: 0 10px 30px rgba(0,0,0,.12);
         }
         h1 { margin: .25rem 0; font-size: clamp(28px, 3.6vw, 44px); line-height: 1.1; }
         p { color: var(--muted); margin: .25rem 0 .75rem }
@@ -75,7 +76,7 @@
         .proj {
             border: 1px solid rgba(0,0,0,.05);
             border-radius: 12px; padding: .85rem 1rem;
-            background: rgba(255,255,255,.6);
+            background: rgba(255,255,255,.7);
         }
         .proj strong { display:block }
 
@@ -84,6 +85,7 @@
         .icon-btns {
             display: flex; justify-content: center; gap: 4em; flex-wrap: wrap;
         }
+
         /* Softer, lighter glass + pastel gradients */
         .icon-btn {
             background-color: transparent;
@@ -97,14 +99,8 @@
             overflow: visible;
         }
         .icon-btn__back,
-        .icon-btn__front,
-        .icon-btn__label {
-            transition:
-                    opacity 0.3s cubic-bezier(0.83, 0, 0.17, 1),
-                    transform 0.3s cubic-bezier(0.83, 0, 0.17, 1);
-        }
-        .icon-btn__back,
         .icon-btn__front {
+            transition: transform 0.3s cubic-bezier(0.83, 0, 0.17, 1);
             border-radius: 1.25em;
             position: absolute; top: 0; left: 0;
             width: 100%; height: 100%;
@@ -115,7 +111,6 @@
             box-shadow: 0.25em -0.25em 0.6em rgba(17, 24, 39, 0.08);
             display: block;
             transform: rotate(10deg);
-            border-radius: 1.25em;
         }
         /* frosted glass: brighter, thinner inset border */
         .icon-btn__front {
@@ -124,36 +119,24 @@
             backdrop-filter: blur(10px) saturate(160%);
             -webkit-backdrop-filter: blur(10px) saturate(160%);
             display: flex;
-            border-radius: 1.25em;
         }
         .icon-btn__icon {
             margin: auto;
             width: 1.5em; height: 1.5em;
             display: flex; align-items: center; justify-content: center;
         }
-        /* labels no longer affect layout */
-        .icon-btn__label {
-            font-size: 1em;
-            white-space: nowrap;
-            text-align: center;
-            line-height: 2;
-            opacity: 0;
-            position: absolute;
-            top: 110%; left: 50%;
-            transform: translate(-50%, 0);
-            width: max-content;
-            pointer-events: none;
-            color: #64748b;
-        }
+
+        /* HIDE LABELS visually (keep aria-label for screen readers) */
+        .icon-btn__label { display: none !important; }
+
         /* gentler hover motion + slightly darker icon on hover */
         .icon-btn:hover .icon-btn__back { transform: rotate(18deg) translate3d(-0.35em, -0.35em, 0.35em); }
         .icon-btn:hover .icon-btn__front { transform: translateZ(1.4em); }
         .icon-btn:hover { color: #0f172a; }
-        .icon-btn:hover .icon-btn__label { opacity: 1; transform: translate(-50%, 10%); }
 
         /* Pastel gradient mappings */
-        .grad-pink   { background: linear-gradient(#f8a5c2, #ffd1e1); }
-        .grad-lilac  { background: linear-gradient(#c8a2f4, #e6d6ff); }
+        .grad-pink     { background: linear-gradient(#f8a5c2, #ffd1e1); }
+        .grad-lilac    { background: linear-gradient(#c8a2f4, #e6d6ff); }
         .grad-babyblue { background: linear-gradient(#a5d8f8, #d3efff); }
     </style>
 </head>
@@ -190,7 +173,7 @@
 <footer class="footer">
     <nav class="icon-btns">
         <!-- GitHub -->
-        <a class="icon-btn" href="https://github.com/lucigoosey27" target="_blank" rel="me noopener" aria-label="GitHub">
+        <a class="icon-btn" href="https://github.com/lucigoosey27" target="_blank" rel="me noopener noreferrer" aria-label="GitHub">
             <span class="icon-btn__back grad-lilac"></span>
             <span class="icon-btn__front">
           <span class="icon-btn__icon" aria-hidden="true">
@@ -204,7 +187,7 @@
         </a>
 
         <!-- LinkedIn -->
-        <a class="icon-btn" href="https://www.linkedin.com/in/lucille-violet-167156280/" target="_blank" rel="me noopener" aria-label="LinkedIn">
+        <a class="icon-btn" href="https://www.linkedin.com/in/lucille-violet-167156280/" target="_blank" rel="me noopener noreferrer" aria-label="LinkedIn">
             <span class="icon-btn__back grad-babyblue"></span>
             <span class="icon-btn__front">
           <span class="icon-btn__icon" aria-hidden="true">
@@ -236,32 +219,37 @@
         const lettersAndSymbols = "ABCDEFGHIJKLMNOPQRSTUVWXYZ!@#$&*()-_+=/[]{};:<>,".split("")
             .concat("0123456789".split(""));
 
-        let letters = [];
+        // Each letter keeps its own start/target RGB and progress so it never converges to one color globally.
+        let letters = []; // {char, color:{r,g,b}, startColor:{r,g,b}, targetColor:{r,g,b}, colorProgress:0..1}
         let grid = {columns:0, rows:0};
         let lastGlitchTime = Date.now();
 
         function hexToRgb(hex) {
             const shorthand = /^#?([a-f\d])([a-f\d])([a-f\d])$/i;
             hex = hex.replace(shorthand, (m,r,g,b) => r+r+g+g+b+b);
-            const res = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i;
+            const res = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
             return res ? { r: parseInt(res[1],16), g: parseInt(res[2],16), b: parseInt(res[3],16) } : null;
         }
-        function interpolateColor(start,end,f){
-            return `rgb(${Math.round(start.r+(end.r-start.r)*f)},${Math.round(start.g+(end.g-start.g)*f)},${Math.round(start.b+(end.b-start.b)*f)})`;
-        }
+        function rgbString(rgb){ return `rgb(${rgb.r},${rgb.g},${rgb.b})`; }
+        function lerp(a,b,t){ return Math.round(a + (b-a)*t); }
+        function mixRGB(start,end,f){ return { r: lerp(start.r,end.r,f), g: lerp(start.g,end.g,f), b: lerp(start.b,end.b,f) }; }
         function randChar(){ return lettersAndSymbols[Math.floor(Math.random()*lettersAndSymbols.length)]; }
-        function randColor(){ return glitchColors[Math.floor(Math.random()*glitchColors.length)]; }
+        function randColorRGB(){ return hexToRgb(glitchColors[Math.floor(Math.random()*glitchColors.length)]); }
 
         function calcGrid(w,h){ return { columns: Math.ceil(w/charWidth), rows: Math.ceil(h/charHeight) }; }
         function initLetters(cols,rows){
             grid = {columns:cols, rows:rows};
             const total = cols*rows;
-            letters = Array.from({length: total}, () => ({
-                char: randChar(),
-                color: randColor(),
-                targetColor: randColor(),
-                colorProgress: 1
-            }));
+            letters = Array.from({length: total}, () => {
+                const c = randColorRGB();
+                return {
+                    char: randChar(),
+                    color: c,            // current RGB
+                    startColor: c,       // last start RGB
+                    targetColor: randColorRGB(),
+                    colorProgress: 1
+                };
+            });
         }
         function resizeCanvas(){
             canvas.width = window.innerWidth * dpr;
@@ -282,7 +270,7 @@
             letters.forEach((l,i)=>{
                 const x = (i % grid.columns) * charWidth;
                 const y = Math.floor(i / grid.columns) * charHeight;
-                ctx.fillStyle = l.color;
+                ctx.fillStyle = rgbString(l.color);
                 ctx.fillText(l.char, x, y);
             });
         }
@@ -293,7 +281,8 @@
                 const l = letters[idx];
                 if(!l) continue;
                 l.char = randChar();
-                l.targetColor = randColor();
+                l.startColor = l.color;            // start from current color
+                l.targetColor = randColorRGB();    // pick a new random target
                 l.colorProgress = smooth ? 0 : 1;
                 if(!smooth){ l.color = l.targetColor; }
             }
@@ -304,12 +293,8 @@
                 if(l.colorProgress < 1){
                     l.colorProgress += 0.05;
                     if(l.colorProgress > 1) l.colorProgress = 1;
-                    const start = hexToRgb(l.color);
-                    const end = hexToRgb(l.targetColor);
-                    if(start && end){
-                        l.color = interpolateColor(start, end, l.colorProgress);
-                        needs = true;
-                    }
+                    l.color = mixRGB(l.startColor, l.targetColor, l.colorProgress);
+                    needs = true;
                 }
             });
             if(needs) drawLetters();
