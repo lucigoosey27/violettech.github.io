@@ -11,9 +11,16 @@
             --muted: #9aa0aa;
             --accent: #a78bfa;
         }
+
         * { box-sizing: border-box }
+
         html, body { height: 100%; margin: 0; }
-        body { display: flex; flex-direction: column; background: var(--bg); color: var(--fg); font: 16px/1.6 system-ui, -apple-system, Segoe UI, Roboto, Inter, sans-serif; }
+        body {
+            display: flex; flex-direction: column;
+            background: var(--bg); color: var(--fg);
+            font: 16px/1.6 system-ui, -apple-system, Segoe UI, Roboto, Inter, sans-serif;
+            overflow-x: hidden; /* prevent tiny horizontal shifts on hover */
+        }
 
         /* Canvas glitch background */
         #glitch-canvas {
@@ -74,6 +81,8 @@
         .icon-btns {
             display: flex; justify-content: center; gap: 4em; flex-wrap: wrap;
         }
+
+        /* Use <a> as the button; lock layout to avoid jiggle */
         .icon-btn {
             background-color: transparent;
             outline: none;
@@ -83,7 +92,9 @@
             transform-style: preserve-3d;
             -webkit-tap-highlight-color: transparent;
             text-decoration: none; color: inherit;
+            overflow: visible; /* let hover transform “escape” without affecting layout */
         }
+
         .icon-btn__back,
         .icon-btn__front,
         .icon-btn__label {
@@ -91,40 +102,51 @@
                     opacity 0.3s cubic-bezier(0.83, 0, 0.17, 1),
                     transform 0.3s cubic-bezier(0.83, 0, 0.17, 1);
         }
+
         .icon-btn__back,
         .icon-btn__front {
             border-radius: 1.25em;
             position: absolute; top: 0; left: 0;
             width: 100%; height: 100%;
+            transform-origin: center; /* stabilize transforms */
         }
+
         .icon-btn__back {
             box-shadow: 0.5em -0.5em 0.75em hsla(223, 10%, 10%, 0.15);
             display: block;
             transform: rotate(15deg);
-            transform-origin: 100% 100%;
         }
+
         .icon-btn__front {
             background-color: hsla(0, 0%, 100%, 0.15);
             box-shadow: 0 0 0 0.1em hsla(0, 0%, 100%, 0.3) inset;
             backdrop-filter: blur(0.75em);
             -webkit-backdrop-filter: blur(0.75em);
             display: flex;
-            transform-origin: 80% 50%;
         }
+
         .icon-btn__icon {
             margin: auto;
             width: 1.5em; height: 1.5em;
             display: flex; align-items: center; justify-content: center;
         }
+
+        /* Label now absolutely placed BELOW without affecting layout */
         .icon-btn__label {
             font-size: 1em;
             white-space: nowrap;
             text-align: center;
             line-height: 2;
             opacity: 0;
-            position: absolute; top: 100%; right: 0; left: 0;
-            transform: translateY(0);
+            position: absolute;
+            top: 110%;                 /* sits below the button */
+            left: 50%;
+            transform: translate(-50%, 0);
+            width: max-content;
+            pointer-events: none;      /* keep hover smooth */
         }
+
+        /* Hover/focus effects (no layout shift) */
         .icon-btn:focus-visible .icon-btn__back,
         .icon-btn:hover .icon-btn__back {
             transform: rotate(25deg) translate3d(-0.5em, -0.5em, 0.5em);
@@ -136,8 +158,10 @@
         .icon-btn:focus-visible .icon-btn__label,
         .icon-btn:hover .icon-btn__label {
             opacity: 1;
-            transform: translateY(20%);
+            transform: translate(-50%, 10%); /* subtle rise, still absolute */
         }
+
+        /* Gradient mappings */
         .grad-blue   { background: linear-gradient(hsl(223, 90%, 50%), hsl(208, 90%, 50%)); }
         .grad-purple { background: linear-gradient(hsl(283, 90%, 50%), hsl(268, 90%, 50%)); }
     </style>
