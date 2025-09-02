@@ -1,10 +1,162 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>$Title$</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Lucille Violet · Portfolio</title>
+    <style>
+        :root {
+            --bg: #06070d;
+            --fg: #e6e6f0;
+            --muted: #9aa0aa;
+            --accent: #a78bfa;
+        }
+        * { box-sizing: border-box }
+        html, body { height: 100%; margin: 0; background: var(--bg); color: var(--fg); font: 16px/1.6 system-ui, -apple-system, Segoe UI, Roboto, Inter, sans-serif; }
+        /* Canvas background sits behind everything */
+        #glitch-canvas {
+            position: fixed; inset: 0; width: 100vw; height: 100vh; display:block; z-index: 0;
+            background: radial-gradient(1200px 800px at 20% 10%, #111827 0%, #06070d 60%, #03040a 100%);
+        }
+        /* Noise overlay for cyberpunk grit */
+        .noise {
+            position: fixed; inset: 0; pointer-events: none; z-index: 1;
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="140" height="140"><filter id="n"><feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="2" stitchTiles="stitch"/></filter><rect width="100%" height="100%" filter="url(%23n)"/></svg>');
+            opacity: .03;
+            mix-blend-mode: screen;
+            animation: hiss 1.5s steps(6,end) infinite;
+        }
+        @keyframes hiss { 50% { opacity:.05 } }
+
+        /* Main content card */
+        .wrap {
+            position: relative; z-index: 2;
+            min-height: 100%;
+            display: grid; place-items: center; padding: 2rem;
+        }
+        .card {
+            width: min(920px, 92vw);
+            background: rgba(10,12,22,.6);
+            border: 1px solid rgba(167,139,250,.25);
+            border-radius: 16px;
+            backdrop-filter: blur(6px) saturate(120%);
+            padding: 1.25rem 1.25rem 1.5rem;
+            box-shadow: 0 10px 30px rgba(0,0,0,.35);
+        }
+        h1 { margin: .25rem 0; font-size: clamp(28px, 3.6vw, 44px); line-height: 1.1; }
+        p { color: var(--muted); margin: .25rem 0 .75rem }
+        a { color: var(--accent); text-decoration: none }
+        a:hover { text-decoration: underline }
+
+        /* Optional: glitchy heading (CSS-only) */
+        .glitch {
+            position: relative; display: inline-block; font-weight: 700;
+            text-shadow: 0 0 12px rgba(167,139,250,.35);
+        }
+        .glitch::before, .glitch::after {
+            content: attr(data-text); position: absolute; inset: 0; pointer-events: none;
+            clip-path: inset(0 0 0 0);
+        }
+        .glitch::before { left: 1px; text-shadow: -1px 0 #00e5ff; animation: g1 2.2s infinite linear alternate-reverse; }
+        .glitch::after  { left:-1px; text-shadow:  1px 0 #ff3b81; animation: g2 1.9s infinite linear alternate; }
+        @keyframes g1 { 10%{clip-path: inset(0 0 82% 0)} 20%{clip-path: inset(15% 0 0 0)} 30%{clip-path: inset(0 0 70% 0)} 40%{clip-path: inset(60% 0 0 0)} 55%{clip-path: inset(0 0 25% 0)} 70%{clip-path: inset(40% 0 0 0)} 85%{clip-path: inset(0 0 55% 0)} }
+        @keyframes g2 { 10%{clip-path: inset(80% 0 0 0)} 25%{clip-path: inset(0 0 20% 0)} 40%{clip-path: inset(50% 0 0 0)} 60%{clip-path: inset(0 0 60% 0)} 75%{clip-path: inset(30% 0 0 0)} 90%{clip-path: inset(0 0 40% 0)} }
+
+        /* Simple project list */
+        .projects { display: grid; gap: .75rem; margin-top: .75rem }
+        .proj {
+            border: 1px solid rgba(255,255,255,.06);
+            border-radius: 12px; padding: .85rem 1rem;
+            background: rgba(255,255,255,.03);
+        }
+        .proj strong { display:block }
+    </style>
 </head>
 <body>
-$END$
+<canvas id="glitch-canvas" aria-hidden="true"></canvas>
+<div class="noise" aria-hidden="true"></div>
+
+<main class="wrap">
+    <section class="card">
+        <h1 class="glitch" data-text="Lucille Violet">Lucille Violet</h1>
+        <p>Game dev & systems tinkerer. I break things, then write docs so you don’t have to. 😸</p>
+
+        <div class="projects">
+            <div class="proj">
+                <strong>Contact Tracing Tracker</strong>
+                <span>RabbitMQ · Docker · C# · ASP.NET Core UI</span>
+            </div>
+            <div class="proj">
+                <strong>Unity Matrix Visualizer</strong>
+                <span>Transforms · UI panel · Buttons > keybinds</span>
+            </div>
+            <div class="proj">
+                <strong>Tic-Tac-Toe Server</strong>
+                <span>TCP sockets · SQLite · Login/Chatting/Playing states</span>
+            </div>
+        </div>
+        <p style="margin-top:1rem">More soon. <a href="#">GitHub</a> · <a href="#">LinkedIn</a> · <a href="mailto:hello@example.com">Email</a></p>
+    </section>
+</main>
+
+<script>
+    // Letter-glitch canvas background (no libs).
+    (function() {
+        const c = document.getElementById('glitch-canvas');
+        const ctx = c.getContext('2d');
+        const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789#@$%&*/+-';
+        let w, h, cols, drops, fontSize;
+
+        function resize() {
+            c.width = w = window.innerWidth;
+            c.height = h = window.innerHeight;
+            fontSize = Math.max(14, Math.min(24, Math.floor(w / 70)));
+            cols = Math.floor(w / fontSize);
+            drops = new Array(cols).fill(0).map(() => Math.random() * -20);
+        }
+        window.addEventListener('resize', resize, { passive:true });
+        resize();
+
+        let t = 0;
+        function draw() {
+            // Trail fade
+            ctx.fillStyle = 'rgba(3,4,10,0.15)';
+            ctx.fillRect(0, 0, w, h);
+
+            ctx.font = fontSize + 'px ui-monospace, SFMono-Regular, Menlo, Consolas, monospace';
+
+            for (let i = 0; i < cols; i++) {
+                const x = i * fontSize;
+                const y = drops[i] * fontSize;
+
+                const ch = chars[(Math.random() * chars.length) | 0];
+                // Neon-ish blend
+                ctx.fillStyle = 'rgba(167,139,250,0.85)';
+                ctx.fillText(ch, x, y);
+                ctx.globalCompositeOperation = 'lighter';
+                ctx.fillStyle = 'rgba(34,211,238,0.3)';
+                ctx.fillText(ch, x + 1, y);
+                ctx.globalCompositeOperation = 'source-over';
+
+                if (y > h && Math.random() > 0.975) drops[i] = 0;
+                else drops[i] += 0.9 + Math.random() * 0.5;
+            }
+
+            // Occasional horizontal glitch slices
+            if ((t++ % 35) === 0) {
+                const slices = 3 + (Math.random() * 3)|0;
+                for (let s = 0; s < slices; s++) {
+                    const sh = (Math.random() * 40 + 10) | 0;   // slice height
+                    const sy = (Math.random() * (h - sh)) | 0;  // slice y
+                    const sx = (Math.random() * 30 - 15) | 0;   // shift
+                    const img = ctx.getImageData(0, sy, w, sh);
+                    ctx.putImageData(img, sx, sy);
+                }
+            }
+            requestAnimationFrame(draw);
+        }
+        draw();
+    })();
+</script>
 </body>
 </html>
