@@ -6,9 +6,8 @@
     <title>Lucille Violet · Portfolio</title>
     <style>
         :root {
-            --bg: #06070d;
-            --fg: #e6e6f0;
-            --muted: #9aa0aa;
+            --fg: #0f172a;   /* dark text for readability */
+            --muted: #475569;
             --accent: #a78bfa;
         }
 
@@ -17,43 +16,47 @@
         html, body { height: 100%; margin: 0; }
         body {
             display: flex; flex-direction: column;
-            background: var(--bg); color: var(--fg);
+            color: var(--fg);
             font: 16px/1.6 system-ui, -apple-system, Segoe UI, Roboto, Inter, sans-serif;
-            overflow-x: hidden; /* prevent tiny horizontal shifts on hover */
+            overflow-x: hidden;
+            background: #ffffff; /* fallback while canvas starts */
         }
 
-        /* Canvas glitch background */
-        #glitch-canvas {
-            position: fixed; inset: 0; width: 100vw; height: 100vh;
-            display:block; z-index: 0;
-            background: radial-gradient(1200px 800px at 20% 10%, #111827 0%, #06070d 60%, #03040a 100%);
+        /* LetterGlitch background container */
+        #letterglitch-container {
+            position: fixed; inset: 0;
+            background: #ffffff; /* white backdrop for pastel pop */
+            overflow: hidden;
+            z-index: 0;
         }
-        .noise {
-            position: fixed; inset: 0; pointer-events: none; z-index: 1;
-            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="140" height="140"><filter id="n"><feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="2" stitchTiles="stitch"/></filter><rect width="100%" height="100%" filter="url(%23n)"/></svg>');
-            opacity: .03;
-            mix-blend-mode: screen;
-            animation: hiss 1.5s steps(6,end) infinite;
+        #letterglitch {
+            display: block;
+            width: 100%; height: 100%;
         }
-        @keyframes hiss { 50% { opacity:.05 } }
+        #vignette-center,
+        #vignette-outer {
+            position: absolute; inset: 0;
+            pointer-events: none;
+            display: none; /* toggled in JS if you want them */
+        }
 
         /* Main content wrapper */
         .wrap { flex: 1 0 auto; position: relative; z-index: 2; display: grid; place-items: center; padding: 2rem; }
         .card {
             width: min(920px, 92vw);
-            background: rgba(10,12,22,.6);
-            border: 1px solid rgba(167,139,250,.25);
+            background: rgba(255,255,255,0.7);
+            border: 1px solid rgba(167,139,250,.35);
             border-radius: 16px;
-            backdrop-filter: blur(6px) saturate(120%);
+            backdrop-filter: blur(12px) saturate(160%);
             padding: 1.25rem 1.25rem 1.5rem;
-            box-shadow: 0 10px 30px rgba(0,0,0,.35);
+            box-shadow: 0 10px 30px rgba(0,0,0,.15);
         }
         h1 { margin: .25rem 0; font-size: clamp(28px, 3.6vw, 44px); line-height: 1.1; }
         p { color: var(--muted); margin: .25rem 0 .75rem }
         a { color: var(--accent); text-decoration: none }
         a:hover { text-decoration: underline }
 
-        /* Glitchy heading */
+        /* Glitchy heading shimmer */
         .glitch {
             position: relative; display: inline-block; font-weight: 700;
             text-shadow: 0 0 12px rgba(167,139,250,.35);
@@ -70,9 +73,9 @@
         /* Project list */
         .projects { display: grid; gap: .75rem; margin-top: .75rem }
         .proj {
-            border: 1px solid rgba(255,255,255,.06);
+            border: 1px solid rgba(0,0,0,.05);
             border-radius: 12px; padding: .85rem 1rem;
-            background: rgba(255,255,255,.03);
+            background: rgba(255,255,255,.6);
         }
         .proj strong { display:block }
 
@@ -81,8 +84,6 @@
         .icon-btns {
             display: flex; justify-content: center; gap: 4em; flex-wrap: wrap;
         }
-
-        /* Use <a> as the button; lock layout to avoid jiggle */
         .icon-btn {
             background-color: transparent;
             outline: none;
@@ -92,9 +93,8 @@
             transform-style: preserve-3d;
             -webkit-tap-highlight-color: transparent;
             text-decoration: none; color: inherit;
-            overflow: visible; /* let hover transform “escape” without affecting layout */
+            overflow: visible; /* let pop-out happen without layout shift */
         }
-
         .icon-btn__back,
         .icon-btn__front,
         .icon-btn__label {
@@ -102,21 +102,18 @@
                     opacity 0.3s cubic-bezier(0.83, 0, 0.17, 1),
                     transform 0.3s cubic-bezier(0.83, 0, 0.17, 1);
         }
-
         .icon-btn__back,
         .icon-btn__front {
             border-radius: 1.25em;
             position: absolute; top: 0; left: 0;
             width: 100%; height: 100%;
-            transform-origin: center; /* stabilize transforms */
+            transform-origin: center; /* stabilize pop */
         }
-
         .icon-btn__back {
             box-shadow: 0.5em -0.5em 0.75em hsla(223, 10%, 10%, 0.15);
             display: block;
             transform: rotate(15deg);
         }
-
         .icon-btn__front {
             background-color: hsla(0, 0%, 100%, 0.15);
             box-shadow: 0 0 0 0.1em hsla(0, 0%, 100%, 0.3) inset;
@@ -124,14 +121,12 @@
             -webkit-backdrop-filter: blur(0.75em);
             display: flex;
         }
-
         .icon-btn__icon {
             margin: auto;
             width: 1.5em; height: 1.5em;
             display: flex; align-items: center; justify-content: center;
         }
-
-        /* Label now absolutely placed BELOW without affecting layout */
+        /* labels no longer affect layout */
         .icon-btn__label {
             font-size: 1em;
             white-space: nowrap;
@@ -139,27 +134,14 @@
             line-height: 2;
             opacity: 0;
             position: absolute;
-            top: 110%;                 /* sits below the button */
-            left: 50%;
+            top: 110%; left: 50%;
             transform: translate(-50%, 0);
             width: max-content;
-            pointer-events: none;      /* keep hover smooth */
+            pointer-events: none;
         }
-
-        /* Hover/focus effects (no layout shift) */
-        .icon-btn:focus-visible .icon-btn__back,
-        .icon-btn:hover .icon-btn__back {
-            transform: rotate(25deg) translate3d(-0.5em, -0.5em, 0.5em);
-        }
-        .icon-btn:focus-visible .icon-btn__front,
-        .icon-btn:hover .icon-btn__front {
-            transform: translateZ(2em);
-        }
-        .icon-btn:focus-visible .icon-btn__label,
-        .icon-btn:hover .icon-btn__label {
-            opacity: 1;
-            transform: translate(-50%, 10%); /* subtle rise, still absolute */
-        }
+        .icon-btn:hover .icon-btn__back { transform: rotate(25deg) translate3d(-0.5em, -0.5em, 0.5em); }
+        .icon-btn:hover .icon-btn__front { transform: translateZ(2em); }
+        .icon-btn:hover .icon-btn__label { opacity: 1; transform: translate(-50%, 10%); }
 
         /* Gradient mappings */
         .grad-blue   { background: linear-gradient(hsl(223, 90%, 50%), hsl(208, 90%, 50%)); }
@@ -167,8 +149,12 @@
     </style>
 </head>
 <body>
-<canvas id="glitch-canvas" aria-hidden="true"></canvas>
-<div class="noise" aria-hidden="true"></div>
+<!-- Pastel LetterGlitch background -->
+<div id="letterglitch-container">
+    <canvas id="letterglitch"></canvas>
+    <div id="vignette-center"></div>
+    <div id="vignette-outer"></div>
+</div>
 
 <main class="wrap">
     <section class="card">
@@ -195,7 +181,7 @@
 <footer class="footer">
     <nav class="icon-btns">
         <!-- GitHub -->
-        <a class="icon-btn" href="https://github.com/lucigoosey27" target="_blank" rel="me noopener" aria-label="GitHub">
+        <a class="icon-btn" href="https://github.com/YOURUSERNAME" target="_blank" rel="me noopener" aria-label="GitHub">
             <span class="icon-btn__back grad-purple"></span>
             <span class="icon-btn__front">
           <span class="icon-btn__icon" aria-hidden="true">
@@ -209,7 +195,7 @@
         </a>
 
         <!-- LinkedIn -->
-        <a class="icon-btn" href="https://linkedin.com/in/lucille-violet-167156280" target="_blank" rel="me noopener" aria-label="LinkedIn">
+        <a class="icon-btn" href="https://linkedin.com/in/YOURUSERNAME" target="_blank" rel="me noopener" aria-label="LinkedIn">
             <span class="icon-btn__back grad-blue"></span>
             <span class="icon-btn__front">
           <span class="icon-btn__icon" aria-hidden="true">
@@ -225,52 +211,118 @@
 </footer>
 
 <script>
-    // Letter-glitch background animation
-    (function() {
-        const c = document.getElementById('glitch-canvas');
-        const ctx = c.getContext('2d');
-        const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789#@$%&*/+-';
-        let w, h, cols, drops, fontSize;
-        function resize() {
-            c.width = w = window.innerWidth;
-            c.height = h = window.innerHeight;
-            fontSize = Math.max(14, Math.min(24, Math.floor(w / 70)));
-            cols = Math.floor(w / fontSize);
-            drops = new Array(cols).fill(0).map(() => Math.random() * -20);
+    (function(){
+        // === Config ===
+        const glitchColors = ['#f8a5c2', '#c8a2f4', '#a5d8f8']; // baby pink, lilac, baby blue
+        const glitchSpeed = 50;     // ms between random letter updates
+        const smooth = true;        // smooth color tweening
+        const centerVignette = false;
+        const outerVignette = false;
+
+        const canvas = document.getElementById('letterglitch');
+        const ctx = canvas.getContext('2d');
+        const dpr = window.devicePixelRatio || 1;
+
+        const charWidth = 10, charHeight = 20, fontSize = 16;
+        const lettersAndSymbols = "ABCDEFGHIJKLMNOPQRSTUVWXYZ!@#$&*()-_+=/[]{};:<>,".split("")
+            .concat("0123456789".split(""));
+
+        let letters = [];
+        let grid = {columns:0, rows:0};
+        let lastGlitchTime = Date.now();
+
+        function hexToRgb(hex) {
+            const shorthand = /^#?([a-f\\d])([a-f\\d])([a-f\\d])$/i;
+            hex = hex.replace(shorthand, (m,r,g,b) => r+r+g+g+b+b);
+            const res = /^#?([a-f\\d]{2})([a-f\\d]{2})([a-f\\d]{2})$/i.exec(hex);
+            return res ? { r: parseInt(res[1],16), g: parseInt(res[2],16), b: parseInt(res[3],16) } : null;
         }
-        window.addEventListener('resize', resize, { passive:true });
-        resize();
-        let t = 0;
-        function draw() {
-            ctx.fillStyle = 'rgba(3,4,10,0.15)';
-            ctx.fillRect(0, 0, w, h);
-            ctx.font = fontSize + 'px ui-monospace, SFMono-Regular, Menlo, Consolas, monospace';
-            for (let i = 0; i < cols; i++) {
-                const x = i * fontSize;
-                const y = drops[i] * fontSize;
-                const ch = chars[(Math.random() * chars.length) | 0];
-                ctx.fillStyle = 'rgba(167,139,250,0.85)';
-                ctx.fillText(ch, x, y);
-                ctx.globalCompositeOperation = 'lighter';
-                ctx.fillStyle = 'rgba(34,211,238,0.3)';
-                ctx.fillText(ch, x + 1, y);
-                ctx.globalCompositeOperation = 'source-over';
-                if (y > h && Math.random() > 0.975) drops[i] = 0;
-                else drops[i] += 0.9 + Math.random() * 0.5;
+        function interpolateColor(start,end,f){
+            return `rgb(${Math.round(start.r+(end.r-start.r)*f)},${Math.round(start.g+(end.g-start.g)*f)},${Math.round(start.b+(end.b-start.b)*f)})`;
+        }
+        function randChar(){ return lettersAndSymbols[Math.floor(Math.random()*lettersAndSymbols.length)]; }
+        function randColor(){ return glitchColors[Math.floor(Math.random()*glitchColors.length)]; }
+
+        function calcGrid(w,h){ return { columns: Math.ceil(w/charWidth), rows: Math.ceil(h/charHeight) }; }
+        function initLetters(cols,rows){
+            grid = {columns:cols, rows:rows};
+            const total = cols*rows;
+            letters = Array.from({length: total}, () => ({
+                char: randChar(),
+                color: randColor(),
+                targetColor: randColor(),
+                colorProgress: 1
+            }));
+        }
+        function resizeCanvas(){
+            canvas.width = window.innerWidth * dpr;
+            canvas.height = window.innerHeight * dpr;
+            canvas.style.width = window.innerWidth + 'px';
+            canvas.style.height = window.innerHeight + 'px';
+            ctx.setTransform(dpr,0,0,dpr,0,0);
+
+            const {columns, rows} = calcGrid(window.innerWidth, window.innerHeight);
+            initLetters(columns, rows);
+            drawLetters();
+        }
+        function drawLetters(){
+            if(!letters.length) return;
+            ctx.clearRect(0,0,canvas.width,canvas.height);
+            ctx.font = fontSize + "px monospace";
+            ctx.textBaseline = 'top';
+            letters.forEach((l,i)=>{
+                const x = (i % grid.columns) * charWidth;
+                const y = Math.floor(i / grid.columns) * charHeight;
+                ctx.fillStyle = l.color;
+                ctx.fillText(l.char, x, y);
+            });
+        }
+        function updateLetters(){
+            const count = Math.max(1, Math.floor(letters.length * 0.05));
+            for(let i=0;i<count;i++){
+                const idx = Math.floor(Math.random()*letters.length);
+                const l = letters[idx];
+                if(!l) continue;
+                l.char = randChar();
+                l.targetColor = randColor();
+                l.colorProgress = smooth ? 0 : 1;
+                if(!smooth){ l.color = l.targetColor; }
             }
-            if ((t++ % 35) === 0) {
-                const slices = 3 + (Math.random() * 3)|0;
-                for (let s = 0; s < slices; s++) {
-                    const sh = (Math.random() * 40 + 10) | 0;
-                    const sy = (Math.random() * (h - sh)) | 0;
-                    const sx = (Math.random() * 30 - 15) | 0;
-                    const img = ctx.getImageData(0, sy, w, sh);
-                    ctx.putImageData(img, sx, sy);
+        }
+        function tweenColors(){
+            let needs = false;
+            letters.forEach(l=>{
+                if(l.colorProgress < 1){
+                    l.colorProgress += 0.05;
+                    if(l.colorProgress > 1) l.colorProgress = 1;
+                    const start = hexToRgb(l.color);
+                    const end = hexToRgb(l.targetColor);
+                    if(start && end){
+                        l.color = interpolateColor(start, end, l.colorProgress);
+                        needs = true;
+                    }
                 }
-            }
-            requestAnimationFrame(draw);
+            });
+            if(needs) drawLetters();
         }
-        draw();
+        function tick(){
+            const now = Date.now();
+            if(now - lastGlitchTime >= glitchSpeed){
+                updateLetters();
+                drawLetters();
+                lastGlitchTime = now;
+            }
+            if(smooth) tweenColors();
+            requestAnimationFrame(tick);
+        }
+
+        window.addEventListener('resize', resizeCanvas, {passive:true});
+        resizeCanvas();
+        tick();
+
+        // toggle vignettes if desired
+        if(centerVignette) document.getElementById('vignette-center').style.display = 'block';
+        if(outerVignette) document.getElementById('vignette-outer').style.display = 'block';
     })();
 </script>
 </body>
