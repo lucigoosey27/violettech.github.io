@@ -84,6 +84,7 @@
         .icon-btns {
             display: flex; justify-content: center; gap: 4em; flex-wrap: wrap;
         }
+        /* Softer, lighter glass + pastel gradients */
         .icon-btn {
             background-color: transparent;
             outline: none;
@@ -92,8 +93,8 @@
             perspective: 24em;
             transform-style: preserve-3d;
             -webkit-tap-highlight-color: transparent;
-            text-decoration: none; color: inherit;
-            overflow: visible; /* let pop-out happen without layout shift */
+            text-decoration: none; color: #475569;   /* softer icon color */
+            overflow: visible;
         }
         .icon-btn__back,
         .icon-btn__front,
@@ -110,16 +111,20 @@
             transform-origin: center; /* stabilize pop */
         }
         .icon-btn__back {
-            box-shadow: 0.5em -0.5em 0.75em hsla(223, 10%, 10%, 0.15);
+            /* lighter shadow + gentler tilt */
+            box-shadow: 0.25em -0.25em 0.6em rgba(17, 24, 39, 0.08);
             display: block;
-            transform: rotate(15deg);
+            transform: rotate(10deg);
+            border-radius: 1.25em;
         }
+        /* frosted glass: brighter, thinner inset border */
         .icon-btn__front {
-            background-color: hsla(0, 0%, 100%, 0.15);
-            box-shadow: 0 0 0 0.1em hsla(0, 0%, 100%, 0.3) inset;
-            backdrop-filter: blur(0.75em);
-            -webkit-backdrop-filter: blur(0.75em);
+            background-color: rgba(255,255,255,0.65);
+            box-shadow: 0 0 0 0.08em rgba(255,255,255,0.55) inset;
+            backdrop-filter: blur(10px) saturate(160%);
+            -webkit-backdrop-filter: blur(10px) saturate(160%);
             display: flex;
+            border-radius: 1.25em;
         }
         .icon-btn__icon {
             margin: auto;
@@ -138,14 +143,18 @@
             transform: translate(-50%, 0);
             width: max-content;
             pointer-events: none;
+            color: #64748b;
         }
-        .icon-btn:hover .icon-btn__back { transform: rotate(25deg) translate3d(-0.5em, -0.5em, 0.5em); }
-        .icon-btn:hover .icon-btn__front { transform: translateZ(2em); }
+        /* gentler hover motion + slightly darker icon on hover */
+        .icon-btn:hover .icon-btn__back { transform: rotate(18deg) translate3d(-0.35em, -0.35em, 0.35em); }
+        .icon-btn:hover .icon-btn__front { transform: translateZ(1.4em); }
+        .icon-btn:hover { color: #0f172a; }
         .icon-btn:hover .icon-btn__label { opacity: 1; transform: translate(-50%, 10%); }
 
-        /* Gradient mappings */
-        .grad-blue   { background: linear-gradient(hsl(223, 90%, 50%), hsl(208, 90%, 50%)); }
-        .grad-purple { background: linear-gradient(hsl(283, 90%, 50%), hsl(268, 90%, 50%)); }
+        /* Pastel gradient mappings */
+        .grad-pink   { background: linear-gradient(#f8a5c2, #ffd1e1); }
+        .grad-lilac  { background: linear-gradient(#c8a2f4, #e6d6ff); }
+        .grad-babyblue { background: linear-gradient(#a5d8f8, #d3efff); }
     </style>
 </head>
 <body>
@@ -181,8 +190,8 @@
 <footer class="footer">
     <nav class="icon-btns">
         <!-- GitHub -->
-        <a class="icon-btn" href="https://github.com/YOURUSERNAME" target="_blank" rel="me noopener" aria-label="GitHub">
-            <span class="icon-btn__back grad-purple"></span>
+        <a class="icon-btn" href="https://github.com/lucigoosey27" target="_blank" rel="me noopener" aria-label="GitHub">
+            <span class="icon-btn__back grad-lilac"></span>
             <span class="icon-btn__front">
           <span class="icon-btn__icon" aria-hidden="true">
             <!-- GitHub SVG -->
@@ -195,8 +204,8 @@
         </a>
 
         <!-- LinkedIn -->
-        <a class="icon-btn" href="https://linkedin.com/in/YOURUSERNAME" target="_blank" rel="me noopener" aria-label="LinkedIn">
-            <span class="icon-btn__back grad-blue"></span>
+        <a class="icon-btn" href="https://www.linkedin.com/in/lucille-violet-167156280/" target="_blank" rel="me noopener" aria-label="LinkedIn">
+            <span class="icon-btn__back grad-babyblue"></span>
             <span class="icon-btn__front">
           <span class="icon-btn__icon" aria-hidden="true">
             <!-- LinkedIn SVG -->
@@ -232,9 +241,9 @@
         let lastGlitchTime = Date.now();
 
         function hexToRgb(hex) {
-            const shorthand = /^#?([a-f\\d])([a-f\\d])([a-f\\d])$/i;
+            const shorthand = /^#?([a-f\d])([a-f\d])([a-f\d])$/i;
             hex = hex.replace(shorthand, (m,r,g,b) => r+r+g+g+b+b);
-            const res = /^#?([a-f\\d]{2})([a-f\\d]{2})([a-f\\d]{2})$/i.exec(hex);
+            const res = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i;
             return res ? { r: parseInt(res[1],16), g: parseInt(res[2],16), b: parseInt(res[3],16) } : null;
         }
         function interpolateColor(start,end,f){
