@@ -3,20 +3,28 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width,initial-scale=1" />
-    <title>Lucille Violet · Portfolio</title>
+    <title>Portfolio Page</title>
+    <meta name="description" content="Lucille Violet — portfolio" />
     <link rel="stylesheet" href="styles.css" />
+    <link rel="stylesheet" href="cursor.css" />
 </head>
 <body>
 <!-- Pastel letter background -->
-<div id="letterglitch-container">
-    <canvas id="letterglitch" aria-hidden="true"></canvas>
+<div id="letterglitch-container" aria-hidden="true">
+    <canvas id="letterglitch"></canvas>
 </div>
+
+<!-- Bubble buttons -->
+<header class="bubble-nav">
+    <button class="cursor-target bubble">About</button>
+    <button class="cursor-target bubble">Projects</button>
+    <button class="cursor-target bubble">Contact</button>
+</header>
 
 <!-- Footer Socials -->
 <footer class="footer">
-    <nav class="icon-btns">
-        <!-- GitHub -->
-        <a class="icon-btn" href="https://github.com/lucigoosey27" target="_blank" rel="me noopener noreferrer" aria-label="GitHub">
+    <nav class="icon-btns" aria-label="Social links">
+        <a class="icon-btn cursor-target" href="https://github.com/lucigoosey27" target="_blank" rel="me noopener noreferrer" aria-label="GitHub">
             <span class="icon-btn__back grad-lilac"></span>
             <span class="icon-btn__front">
           <span class="icon-btn__icon" aria-hidden="true">
@@ -28,8 +36,7 @@
         </span>
         </a>
 
-        <!-- LinkedIn -->
-        <a class="icon-btn" href="https://www.linkedin.com/in/lucille-violet-167156280/" target="_blank" rel="me noopener noreferrer" aria-label="LinkedIn">
+        <a class="icon-btn cursor-target" href="https://www.linkedin.com/in/lucille-violet-167156280/" target="_blank" rel="me noopener noreferrer" aria-label="LinkedIn">
             <span class="icon-btn__back grad-babyblue"></span>
             <span class="icon-btn__front">
           <span class="icon-btn__icon" aria-hidden="true">
@@ -43,6 +50,16 @@
     </nav>
 </footer>
 
+<!-- Target cursor container -->
+<div id="target-cursor" class="target-cursor-wrapper">
+    <div class="target-cursor-dot"></div>
+    <div class="target-cursor-corner corner-tl"></div>
+    <div class="target-cursor-corner corner-tr"></div>
+    <div class="target-cursor-corner corner-br"></div>
+    <div class="target-cursor-corner corner-bl"></div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
 <script src="app.js"></script>
 </body>
 </html>
