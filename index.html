@@ -7,6 +7,7 @@
     <meta name="description" content="Lucille Violet — portfolio" />
     <link rel="stylesheet" href="styles.css" />
     <link rel="stylesheet" href="cursor.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
 </head>
 <body>
 <!-- Pastel letter background -->
@@ -16,10 +17,164 @@
 
 <!-- Bubble buttons -->
 <header class="bubble-nav">
-    <button class="cursor-target bubble">About</button>
-    <button class="cursor-target bubble">Projects</button>
-    <button class="cursor-target bubble">Contact</button>
+    <button class="cursor-target bubble" data-section="about">About</button>
+    <button class="cursor-target bubble" data-section="projects">Projects</button>
 </header>
+
+<!-- Section content -->
+<main class="content-panel">
+
+    <section id="section-about" class="section">
+        <div class="about-blob blob-1"></div>
+        <div class="about-blob blob-2"></div>
+        <div class="about-blob blob-3"></div>
+        <div class="about-blob blob-4"></div>
+        <div class="section-inner about-inner">
+
+            <div class="about-header">
+                <h2 class="section-title">Lucille Violet <span class="pronouns">(They/Them)</span></h2>
+                <p class="about-tagline">Software Engineer &nbsp;·&nbsp; Game Developer &nbsp;·&nbsp; Creative Technologist</p>
+            </div>
+
+            <div class="about-body">
+                <div class="about-bio">
+                    <p>Hi! I'm Lucille, a 25-year-old software engineer and game developer born in New Zealand, raised in Singapore, and now living in Sydney, Australia. I'm currently in my third and final year of a Bachelor of Software Engineering (Game Development) at Torrens University, graduating with a GPA of 6.35.</p>
+
+                    <p>Tech has been a constant thread throughout my life. Growing up across different countries gave me a broad perspective, and an early fascination with how things are built digitally never really left. I've always been drawn to the intersection of logic and creativity: that sweet spot where a well-crafted system meets an experience that genuinely moves people. Game development, for me, is exactly that: a discipline that demands rigorous engineering thinking while leaving room for storytelling, design, and artistry.</p>
+
+                    <p>Over the course of my degree and collaborative projects, I've built games from the ground up with small teams, written gameplay and AI systems from scratch, and developed a real love for the craft of programming, particularly in C# and Unity, where I've spent the most time. I'm drawn to the challenge of designing systems that feel intuitive for players while remaining clean and maintainable under the hood.</p>
+
+                    <p>I also keep a close eye on the rapidly evolving world of AI, from large language models to AI agents and the broader implications of where the technology is heading. It's an area I find genuinely exciting, and staying current with it feels less like homework and more like keeping up with something I care about.</p>
+
+                    <p>Outside of all that, I have a soft spot for the meticulous world of LaTeX and enjoy exploring web technologies to keep my skills sharp across the stack. Whether it's a canvas-animated portfolio or a Victorian banking sim, I bring the same curiosity and care to whatever I'm building.</p>
+                </div>
+
+                <div class="about-sidebar">
+                    <div class="about-card">
+                        <h3 class="about-card-title">Skills</h3>
+                        <ul class="about-skills-list">
+                            <li>HTML</li>
+                            <li>CSS</li>
+                            <li>JavaScript</li>
+                            <li>C#</li>
+                            <li>Unity</li>
+                            <li>Unreal Engine</li>
+                            <li>Python</li>
+                            <li>LaTeX <span class="skill-note">✦ special interest</span></li>
+                        </ul>
+                    </div>
+
+                    <div class="about-card">
+                        <h3 class="about-card-title">Education</h3>
+                        <p class="edu-degree">Bachelor of Software Engineering <span class="edu-spec">(Game Development)</span></p>
+                        <p class="edu-school">Torrens University Australia</p>
+                        <p class="edu-detail">Third Year &nbsp;·&nbsp; GPA 6.35</p>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <section id="section-projects" class="section">
+        <div class="projects-grid" id="projectsGrid">
+
+            <!-- Project – Tavern of Fates -->
+            <div class="project-card">
+                <img src="Photos/tavernoffates.png" alt="The Tavern of Fates Thumbnail" class="project-thumb">
+                <h3>🎴 The Tavern of Fates</h3>
+                <p>A deck-driven roguelike where you wager your lifespan to bend fate through tarot cards, dice rolls, and branching choices. Built in Unity to explore strategy and narrative systems.</p>
+                <div class="tags">
+                    <span class="tag">Unity</span>
+                    <span class="tag">Roguelike</span>
+                    <span class="tag">Deck Strategy</span>
+                </div>
+                <div class="team-links" aria-label="Team members">
+                    <span class="team-label">Team:</span>
+                    <a class="team-link cursor-target" href="https://www.linkedin.com/in/andre-lamb/" target="_blank" rel="noopener">
+                        <i class="fab fa-linkedin"></i>
+                        <span class="team-name">Andre</span>
+                        <span class="team-role">3D Art / Lead Game Designer / Producer</span>
+                    </a>
+                    <a class="team-link cursor-target" href="https://www.linkedin.com/in/alexander-goldberg-133281170/" target="_blank" rel="noopener">
+                        <i class="fab fa-linkedin"></i>
+                        <span class="team-name">Alexander Goldberg</span>
+                        <span class="team-role">Project Lead / Assistant Programmer / Assistant Game Designer</span>
+                    </a>
+                </div>
+                <div class="project-links">
+                    <a href="https://play.unity.com/en/games/bea75e10-a35e-4001-9099-f28c9135167a/the-tavern-of-fates" target="_blank" class="link-btn cursor-target">
+                        <i class="fas fa-gamepad"></i> Play Demo (Unity Play)
+                    </a>
+                </div>
+            </div>
+
+            <!-- Project – (B)An(K)alogue -->
+            <div class="project-card">
+                <img src="Photos/bankalogue.png" alt="(B)An(K)alogue Thumbnail" class="project-thumb">
+                <h3>🖋️ (B)An(K)alogue</h3>
+                <p>A Victorian-era banking sim focused on note-taking, deposits/withdrawals, and serving customers under time pressure. Built in Unity to explore systems-driven gameplay.</p>
+                <div class="tags">
+                    <span class="tag">Unity</span>
+                    <span class="tag">Simulator</span>
+                    <span class="tag">Narrative</span>
+                </div>
+                <div class="team-links" aria-label="Team members">
+                    <span class="team-label">Team:</span>
+                    <a class="team-link cursor-target" href="https://www.linkedin.com/in/andre-lamb/" target="_blank" rel="noopener">
+                        <i class="fab fa-linkedin"></i>
+                        <span class="team-name">Andre</span>
+                        <span class="team-role">3D Art / Lead Game Designer / Producer</span>
+                    </a>
+                    <a class="team-link cursor-target" href="https://www.linkedin.com/in/alexander-goldberg-133281170/" target="_blank" rel="noopener">
+                        <i class="fab fa-linkedin"></i>
+                        <span class="team-name">Alexander Goldberg</span>
+                        <span class="team-role">Project Lead / Assistant Programmer / Assistant Game Designer</span>
+                    </a>
+                </div>
+                <div class="project-links">
+                    <a href="https://play.unity.com/en/games/6278a9e3-ffe5-4caf-93da-56cdfd454c7e/bankalogue" target="_blank" class="link-btn cursor-target">
+                        <i class="fas fa-gamepad"></i> Play Demo (Unity Play)
+                    </a>
+                </div>
+            </div>
+
+            <!-- Project – Trainsformer: The Western Track -->
+            <div class="project-card">
+                <img src="Photos/trainsformers.png" alt="Trainsformer: The Western Track Thumbnail" class="project-thumb">
+                <h3>🚂 Trainsformer: The Western Track</h3>
+                <p>A turn-based JRPG prototype where you outthink adaptive machine enemies using move types, timing, and strategy. Built in Unity to explore AI-driven combat systems and player counter-play.</p>
+                <div class="tags">
+                    <span class="tag">Unity</span>
+                    <span class="tag">Turn-Based</span>
+                    <span class="tag">JRPG</span>
+                    <span class="tag">AI</span>
+                </div>
+                <div class="team-links" aria-label="Team members">
+                    <span class="team-label">Team:</span>
+                    <a class="team-link cursor-target" href="https://www.linkedin.com/in/andre-lamb/" target="_blank" rel="noopener">
+                        <i class="fab fa-linkedin"></i>
+                        <span class="team-name">Andre</span>
+                        <span class="team-role">3D Art / Lead Game Designer / Producer</span>
+                    </a>
+                    <a class="team-link cursor-target" href="https://www.linkedin.com/in/alexander-goldberg-133281170/" target="_blank" rel="noopener">
+                        <i class="fab fa-linkedin"></i>
+                        <span class="team-name">Alexander Goldberg</span>
+                        <span class="team-role">Project Lead / Assistant Programmer / Assistant Game Designer</span>
+                    </a>
+                </div>
+                <div class="project-links">
+                    <a href="https://play.unity.com/en/games/2b384abe-1f17-4f8e-adb7-03e946ef30ac/trainsformers-the-western-track" target="_blank" class="link-btn cursor-target">
+                        <i class="fas fa-gamepad"></i> Play Demo (Unity Play)
+                    </a>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+
+</main>
 
 <!-- Footer Socials -->
 <footer class="footer">
@@ -31,6 +186,18 @@
             <!-- GitHub SVG -->
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="currentColor">
               <path d="M12 .5C5.65.5.5 5.65.5 12c0 5.09 3.29 9.4 7.85 10.93.58.11.79-.25.79-.55 0-.27-.01-1.17-.02-2.12-3.19.69-3.86-1.54-3.86-1.54-.53-1.35-1.29-1.71-1.29-1.71-1.06-.73.08-.72.08-.72 1.17.08 1.79 1.2 1.79 1.2 1.04 1.79 2.73 1.27 3.39.97.1-.75.41-1.27.74-1.56-2.55-.29-5.23-1.28-5.23-5.7 0-1.26.45-2.28 1.19-3.09-.12-.29-.52-1.46.11-3.04 0 0 .97-.31 3.18 1.18.92-.26 1.9-.39 2.88-.39s1.96.13 2.88.39c2.21-1.49 3.18-1.18 3.18-1.18.63 1.58.23 2.75.11 3.04.74.81 1.19 1.83 1.19 3.09 0 4.43-2.68 5.4-5.24 5.68.42.36.79 1.08.79 2.17 0 1.57-.01 2.83-.01 3.21 0 .3.21.67.8.55C20.71 21.4 24 17.09 24 12 24 5.65 18.85.5 12 .5z"/>
+            </svg>
+          </span>
+        </span>
+        </a>
+
+        <a class="icon-btn cursor-target" href="mailto:vlucille0@gmail.com" aria-label="Email">
+            <span class="icon-btn__back grad-pink"></span>
+            <span class="icon-btn__front">
+          <span class="icon-btn__icon" aria-hidden="true">
+            <!-- Email SVG -->
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="currentColor">
+              <path d="M20 4H4C2.9 4 2 4.9 2 6v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4-8 5-8-5V6l8 5 8-5v2z"/>
             </svg>
           </span>
         </span>

@@ -116,11 +116,10 @@
         }
         createSpin();
 
-        // follow mouse
-        function moveCursor(x,y) {
-            gsap.to(cursor, { x, y, duration:0.1, ease:'power3.out' });
-        }
-        window.addEventListener('mousemove', e => moveCursor(e.clientX, e.clientY));
+        // follow mouse — 1:1 via gsap.set (no lag, no competing tweens)
+        window.addEventListener('mousemove', e => {
+            gsap.set(cursor, { x: e.clientX, y: e.clientY });
+        });
 
         // click feedback
         window.addEventListener('mousedown', ()=> {
@@ -226,4 +225,40 @@
     })();
 })();
 
-//test line for commit
+// ===== Section Navigation =====
+(function() {
+    const bubbles = document.querySelectorAll('.bubble[data-section]');
+    const panel   = document.querySelector('.content-panel');
+    let activeBtn = null;
+
+    // Auto-open About on load
+    window.addEventListener('DOMContentLoaded', () => {
+        document.querySelector('.bubble[data-section="about"]')?.click();
+    });
+
+    bubbles.forEach(btn => {
+        btn.addEventListener('click', () => {
+            const id      = btn.dataset.section;
+            const section = document.getElementById('section-' + id);
+            if (!section) return;
+
+            if (activeBtn === btn) {
+                // Toggle off — hide everything
+                btn.classList.remove('active');
+                section.classList.remove('active');
+                panel.style.pointerEvents = 'none';
+                activeBtn = null;
+            } else {
+                // Switch to new section
+                if (activeBtn) {
+                    activeBtn.classList.remove('active');
+                    document.querySelector('.section.active')?.classList.remove('active');
+                }
+                btn.classList.add('active');
+                section.classList.add('active');
+                panel.style.pointerEvents = 'auto';
+                activeBtn = btn;
+            }
+        });
+    });
+})();
