@@ -341,32 +341,6 @@ body {
     margin-left: 0.2rem;
 }
 
-.edu-degree {
-    margin: 0 0 0.3rem;
-    font-size: 0.9rem;
-    font-weight: 600;
-    color: #2d1b69;
-    line-height: 1.5;
-}
-
-.edu-spec {
-    font-weight: 400;
-    color: var(--muted);
-}
-
-.edu-school {
-    margin: 0 0 0.4rem;
-    font-size: 0.85rem;
-    color: var(--muted);
-}
-
-.edu-detail {
-    margin: 0;
-    font-size: 0.8rem;
-    font-weight: 600;
-    color: #c8a2f4;
-}
-
 @media (max-width: 720px) {
     .about-body { grid-template-columns: 1fr; }
 }
