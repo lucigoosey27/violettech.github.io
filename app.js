@@ -88,8 +88,9 @@
     }
 
     addEventListener('resize', resize, { passive: true });
+    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
     resize();
-    tick();
+    if (!reduceMotion.matches) tick(); // reduced motion: draw the background once, no animation
 
     // ===== TargetCursor (ReactBits vanilla port) =====
     (function() {
