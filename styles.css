@@ -602,6 +602,13 @@ body {
     .projects-grid.carousel-track { scroll-behavior: auto; }
 }
 
+/* Phones: keep names on one line, put the role underneath */
+@media (max-width: 480px) {
+    .team-link { flex-wrap: wrap; row-gap: 0; }
+    .team-name { white-space: nowrap; }
+    .team-role { flex-basis: 100%; padding-left: 1.35rem; }
+}
+
 /* ===== Polish ===== */
 /* Visible keyboard focus (the default cursor is hidden by the custom one) */
 :focus-visible {
