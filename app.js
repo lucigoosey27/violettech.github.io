@@ -262,3 +262,53 @@
         });
     });
 })();
+
+// ===== Projects Carousel =====
+(function() {
+    const root  = document.getElementById('projectsCarousel');
+    if (!root) return;
+    const track = root.querySelector('.carousel-track');
+    const cards = Array.from(track.children);
+    const prev  = root.querySelector('.carousel-prev');
+    const next  = root.querySelector('.carousel-next');
+    const dots  = root.querySelector('.carousel-dots');
+
+    const step = () => cards.length > 1
+        ? cards[1].offsetLeft - cards[0].offsetLeft
+        : track.clientWidth;
+    const maxScroll = () => track.scrollWidth - track.clientWidth;
+    const current = () => {
+        if (track.scrollLeft >= maxScroll() - 2) return cards.length - 1;
+        return Math.min(cards.length - 1, Math.round(track.scrollLeft / step()));
+    };
+    const goTo = i => track.scrollTo({ left: i * step() });
+
+    const dotEls = cards.map((card, i) => {
+        const d = document.createElement('button');
+        d.type = 'button';
+        d.className = 'carousel-dot cursor-target';
+        d.setAttribute('aria-label', 'Go to project ' + (i + 1));
+        d.addEventListener('click', () => goTo(i));
+        dots.appendChild(d);
+        return d;
+    });
+
+    function update() {
+        const i = current();
+        dotEls.forEach((d, n) => d.setAttribute('aria-current', n === i ? 'true' : 'false'));
+        prev.disabled = track.scrollLeft <= 2;
+        next.disabled = track.scrollLeft >= maxScroll() - 2;
+    }
+
+    prev.addEventListener('click', () => track.scrollBy({ left: -step() }));
+    next.addEventListener('click', () => track.scrollBy({ left:  step() }));
+    track.addEventListener('scroll', () => requestAnimationFrame(update), { passive: true });
+    track.addEventListener('keydown', e => {
+        if (e.key === 'ArrowRight') { e.preventDefault(); next.click(); }
+        if (e.key === 'ArrowLeft')  { e.preventDefault(); prev.click(); }
+    });
+    addEventListener('resize', update, { passive: true });
+    // the section is display:none until opened, so re-measure when it becomes visible
+    if ('ResizeObserver' in window) new ResizeObserver(update).observe(track);
+    update();
+})();

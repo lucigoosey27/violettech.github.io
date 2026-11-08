@@ -77,7 +77,24 @@
     </section>
 
     <section id="section-projects" class="section">
-        <div class="projects-grid" id="projectsGrid">
+        <!-- Featured – Tiny Conquerors -->
+        <article class="project-card project-featured">
+            <img src="Photos/tinyconquerors.png" alt="Tiny Conquerors title art: a small orange ant raising a leaf-topped twig banner in a grassy field" class="project-thumb">
+            <div class="project-featured-body">
+                <span class="new-badge">New</span>
+                <h3>🐜 Tiny Conquerors</h3>
+                <p>Tiny Conquerors is a real-time strategy game played at ant scale. You command a colony in one open field, gather twigs and crumbs from the grass around you, and build an army to take the rival colony's anthill before they take yours.</p>
+                <div class="tags">
+                    <span class="tag">Real-Time Strategy</span>
+                    <span class="tag">Strategy</span>
+                    <span class="tag">Resource Gathering</span>
+                </div>
+            </div>
+        </article>
+
+        <!-- Carousel – previous projects -->
+        <div class="carousel" id="projectsCarousel">
+        <div class="projects-grid carousel-track" id="projectsGrid" role="region" aria-label="Projects carousel" tabindex="0">
 
             <!-- Project – Tavern of Fates -->
             <div class="project-card">
@@ -170,6 +187,17 @@
                 </div>
             </div>
 
+        </div>
+
+            <div class="carousel-controls">
+                <button class="carousel-btn carousel-prev cursor-target" type="button" aria-label="Previous project">
+                    <i class="fas fa-chevron-left" aria-hidden="true"></i>
+                </button>
+                <div class="carousel-dots" aria-label="Project position"></div>
+                <button class="carousel-btn carousel-next cursor-target" type="button" aria-label="Next project">
+                    <i class="fas fa-chevron-right" aria-hidden="true"></i>
+                </button>
+            </div>
         </div>
     </section>
 
