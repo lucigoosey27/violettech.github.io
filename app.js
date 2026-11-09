@@ -227,41 +227,52 @@
 })();
 
 // ===== Section Navigation =====
+// Each section has its own URL fragment: #about and #projects.
 (function() {
-    const bubbles = document.querySelectorAll('.bubble[data-section]');
+    const bubbles = Array.from(document.querySelectorAll('.bubble[data-section]'));
     const panel   = document.querySelector('.content-panel');
-    let activeBtn = null;
+    const ids     = bubbles.map(b => b.dataset.section).filter(id => document.getElementById('section-' + id));
+    let activeId  = null;
 
-    // Auto-open About on load
-    window.addEventListener('DOMContentLoaded', () => {
-        document.querySelector('.bubble[data-section="about"]')?.click();
-    });
+    // Show one section, or none (null). Safe to call repeatedly.
+    function apply(id) {
+        if (id === activeId) return;
+        bubbles.forEach(b => b.classList.toggle('active', b.dataset.section === id));
+        document.querySelectorAll('.section').forEach(sec => sec.classList.toggle('active', sec.id === 'section-' + id));
+        panel.style.pointerEvents = id ? 'auto' : 'none';
+        activeId = id;
+    }
+
+    const idFromHash = () => {
+        const id = decodeURIComponent(location.hash.slice(1)).toLowerCase();
+        return ids.includes(id) ? id : null;
+    };
+
+    function setUrl(id) {
+        const url = id ? '#' + id : location.pathname + location.search;
+        try { history.pushState(null, '', url); }
+        catch (e) { if (id) location.hash = id; }   // fallback; hashchange re-applies the same section
+    }
 
     bubbles.forEach(btn => {
         btn.addEventListener('click', () => {
-            const id      = btn.dataset.section;
-            const section = document.getElementById('section-' + id);
-            if (!section) return;
-
-            if (activeBtn === btn) {
-                // Toggle off — hide everything
-                btn.classList.remove('active');
-                section.classList.remove('active');
-                panel.style.pointerEvents = 'none';
-                activeBtn = null;
-            } else {
-                // Switch to new section
-                if (activeBtn) {
-                    activeBtn.classList.remove('active');
-                    document.querySelector('.section.active')?.classList.remove('active');
-                }
-                btn.classList.add('active');
-                section.classList.add('active');
-                panel.style.pointerEvents = 'auto';
-                activeBtn = btn;
-            }
+            const id = btn.dataset.section;
+            if (!ids.includes(id)) return;
+            const target = (activeId === id) ? null : id;   // clicking the open section closes it
+            apply(target);
+            setUrl(target);
         });
     });
+
+    // Back/forward buttons and edited addresses
+    const sync = () => apply(idFromHash() || 'about');
+    window.addEventListener('popstate', sync);
+    window.addEventListener('hashchange', sync);
+
+    // On load: open the section named in the URL, otherwise About
+    const init = () => apply(idFromHash() || 'about');
+    if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);
+    else init();
 })();
 
 // ===== Projects Carousel =====
